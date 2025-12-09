@@ -8,7 +8,7 @@
     <groupId>org.example</groupId>
     <artifactId>CI615</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <!-- Project Information -->
     <name>CI615</name>
@@ -25,6 +25,29 @@
 
     <!-- Dependencies -->
     <dependencies>
+        <!-- Jakarta Servlet API - Provided by Tomcat -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Server Pages API - Provided by Tomcat -->
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>3.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSTL - JSP Standard Tag Library -->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!-- JUnit 5 - Testing Framework -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
