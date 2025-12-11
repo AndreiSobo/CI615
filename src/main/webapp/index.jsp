@@ -46,6 +46,12 @@
             <li>Create JSP pages in <code>src/main/webapp</code></li>
             <li>Configure web components in <code>WEB-INF/web.xml</code></li>
         </ul>
+
+        <h3>Room Booking System:</h3>
+        <ul>
+            <li><a href="${pageContext.request.contextPath}/booking">Book a Room</a></li>
+            <li><a href="${pageContext.request.contextPath}/booking?action=list">View All Bookings</a></li>
+        </ul>
     </div>
 </body>
 </html>

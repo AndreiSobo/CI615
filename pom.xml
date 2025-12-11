@@ -41,11 +41,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JSTL - JSP Standard Tag Library -->
+        <!-- JSTL - JSP Standard Tag Library (Jakarta EE 10) -->
         <dependency>
-            <groupId>jakarta.servlet.jsp.jstl</groupId>
-            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-            <version>3.0.0</version>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
         <!-- JUnit 5 - Testing Framework -->
@@ -56,8 +56,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Add more dependencies here as needed -->
-        <!-- Example: Database driver, logging, etc. -->
     </dependencies>
 
     <!-- Build Configuration -->
