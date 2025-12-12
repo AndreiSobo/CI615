@@ -1,6 +1,7 @@
-# CI615 Jakarta EE Project Setup Documentation
+# CI615 Project Documentation
 
-**Project:** CI615 - Object Oriented Design and Architecture
+**Project:** CI615 - Object Oriented Design and Architecture  
+**Last Updated:** December 11, 2025
 
 ---
 
@@ -11,8 +12,10 @@
 4. [Project Configuration](#project-configuration)
 5. [Web Application Structure](#web-application-structure)
 6. [IntelliJ IDEA Run Configuration](#intellij-idea-run-configuration)
-7. [Verification](#verification)
-8. [Troubleshooting](#troubleshooting)
+7. [Building and Deployment](#building-and-deployment)
+8. [Running the Application](#running-the-application)
+9. [Troubleshooting](#troubleshooting)
+10. [Common Issues and Fixes](#common-issues-and-fixes)
 
 ---
 
@@ -474,7 +477,7 @@ Click **Apply** and then **OK**
 
 ---
 
-## Verification
+## Building and Deployment
 
 ### 1. Build the Project
 
@@ -488,7 +491,7 @@ mvn clean package
 
 **Expected Result:**
 - No compilation errors
-- WAR file created in `target/` directory
+- WAR file created: `target/CI615-1.0-SNAPSHOT.war`
 
 ### 2. Reload Maven Dependencies (if needed)
 
@@ -498,7 +501,9 @@ If IntelliJ shows "Dependency not found" errors:
 2. Click the **Reload** button (⟳ circular arrow icon)
 3. Wait for IntelliJ to download and index dependencies
 
-### 3. Run the Application
+### 3. Deployment Methods
+
+#### Method A: IntelliJ IDEA (Recommended)
 
 1. Select the Tomcat run configuration from the dropdown
 2. Click the **Run** button (▶) or press `Shift+F10`
@@ -506,34 +511,214 @@ If IntelliJ shows "Dependency not found" errors:
 
 **Expected Console Output:**
 ```
-[2025-12-09 20:50:00,123] Artifact CI615:war exploded: Artifact is being deployed, please wait...
+[2025-12-11 20:50:00,123] Artifact CI615:war exploded: Artifact is being deployed, please wait...
 Connected to server
-[2025-12-09 20:50:05,456] Artifact CI615:war exploded: Artifact is deployed successfully
-[2025-12-09 20:50:05,457] Artifact CI615:war exploded: Deploy took 5,334 milliseconds
+[2025-12-11 20:50:05,456] Artifact CI615:war exploded: Artifact is deployed successfully
+[2025-12-11 20:50:05,457] Artifact CI615:war exploded: Deploy took 5,334 milliseconds
 ```
 
-### 4. Access the Application
+#### Method B: Manual Tomcat Deployment
 
-**URL:** http://localhost:8080/CI615_war
-
-**Expected Result:**
-- Browser opens automatically (if configured)
-- Welcome page displays:
-  - "Welcome to CI615"
-  - "Object Oriented Design and Architecture"
-  - Current server time
-  - "Successfully deployed!" message
-
-### 5. Verify Tomcat is Running
-
-**Check Tomcat Console:**
-```
-INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5334] milliseconds
+1. **Copy WAR file to Tomcat:**
+```powershell
+Copy-Item "target\CI615-1.0-SNAPSHOT.war" "apache-tomcat-10.1.50\webapps\" -Force
 ```
 
-**Check Browser:**
-- Page loads without errors
-- Server time is displayed (confirms JSP is working)
+2. **Start Tomcat:**
+```powershell
+cd apache-tomcat-10.1.50\bin
+.\startup.bat
+```
+
+3. **Tomcat will automatically deploy the WAR file**
+
+#### Method C: Clean Redeploy
+
+When you need to ensure a fresh deployment:
+
+1. **Stop Tomcat** (if running)
+2. **Clean old deployments:**
+```powershell
+Remove-Item "apache-tomcat-10.1.50\webapps\CI615-1.0-SNAPSHOT" -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item "apache-tomcat-10.1.50\webapps\CI615_war" -Recurse -Force -ErrorAction SilentlyContinue
+```
+3. **Rebuild:**
+```powershell
+mvn clean package
+```
+4. **Redeploy and restart Tomcat**
+
+---
+
+## Running the Application
+
+### Starting the Server
+
+**IntelliJ IDEA:**
+- Click the green **Run** button (▶) in the toolbar
+- Or press `Shift+F10`
+- Or select Run → Run 'Tomcat 10 - CI615'
+
+**Manual Tomcat:**
+```powershell
+cd apache-tomcat-10.1.50\bin
+.\startup.bat
+```
+
+### Stopping the Server
+
+**IntelliJ IDEA:**
+- Click the red **Stop** button (■) in the Run window
+
+**Manual Tomcat:**
+```powershell
+cd apache-tomcat-10.1.50\bin
+.\shutdown.bat
+```
+
+### Accessing the Application
+
+**Main URL:** http://localhost:8080/CI615-1.0-SNAPSHOT/  
+*Or* http://localhost:8080/CI615_war/ *(depending on deployment configuration)*
+
+**Application Pages:**
+- **Homepage:** `http://localhost:8080/CI615-1.0-SNAPSHOT/`
+- **Book a Room:** `http://localhost:8080/CI615-1.0-SNAPSHOT/booking`
+- **View Bookings:** `http://localhost:8080/CI615-1.0-SNAPSHOT/booking?action=list`
+
+### Verifying the Application is Running
+
+1. **Check Tomcat Console:**
+```
+INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [3698] milliseconds
+```
+
+2. **Check in Browser:**
+   - Navigate to the main URL
+   - You should see "Welcome to CI615" page
+   - Server time is displayed (confirms JSP is working)
+   - Links to booking features are functional
+
+3. **Test the Features:**
+   - Click "Book a Room" → Should display booking form with room options
+   - Click "View All Bookings" → Should display bookings table (empty initially)
+   - Submit a booking → Should redirect to bookings list with the new booking
+
+---
+
+## Common Issues and Fixes
+
+### Issue: Server Not Running / Connection Refused
+
+**Symptoms:**
+- Browser shows "localhost refused to connect" or "ERR_CONNECTION_REFUSED"
+- Links on homepage not working
+
+**Cause:** Tomcat server is not running
+
+**Solution:**
+1. **In IntelliJ:** Click the green **Run** button (▶) to start Tomcat
+2. **Manual:** Run `apache-tomcat-10.1.50\bin\startup.bat`
+3. **Verify:** Check that port 8080 is in use:
+```powershell
+netstat -ano | findstr :8080
+```
+
+### Issue: JSTL NoClassDefFoundError
+
+**Symptoms:**
+```
+java.lang.NoClassDefFoundError: jakarta/servlet/jsp/jstl/core/LoopTag
+```
+
+**Cause:** JSTL implementation libraries missing from WAR file
+
+**Solution:** Already fixed in `pom.xml`. If you still see this:
+1. **Rebuild:**
+```powershell
+mvn clean package
+```
+2. **Verify WAR contains:** `WEB-INF/lib/jakarta.servlet.jsp.jstl-3.0.1.jar`
+3. **Redeploy** using Method C (Clean Redeploy)
+
+### Issue: Incorrect Application Context / 404 Error
+
+**Symptoms:**
+- 404 error when accessing the application
+- URL mismatch between browser and configuration
+
+**Solution:**
+
+1. **Check the Deployment Configuration:**
+   - Run → Edit Configurations
+   - Select your Tomcat configuration
+   - Go to "Deployment" tab
+   - Note the **Application context** value (e.g., `/CI615`, `/CI615_war`, or `/CI615-1.0-SNAPSHOT`)
+
+2. **Update the URL to match:**
+   - If context is `/CI615` → Use `http://localhost:8080/CI615/`
+   - If context is `/CI615_war` → Use `http://localhost:8080/CI615_war/`
+   - If context is `/CI615-1.0-SNAPSHOT` → Use `http://localhost:8080/CI615-1.0-SNAPSHOT/`
+
+3. **To change the context:**
+   - In "Deployment" tab, select your artifact
+   - Change the **Application context** field to your preferred path
+   - Click OK and restart the server
+
+### Issue: Changes Not Reflected After Edit
+
+**Cause:** Hot deploy not working or using wrong artifact type
+
+**Solution:**
+
+1. **Use "war exploded" artifact:**
+   - Run → Edit Configurations → Deployment tab
+   - Use `CI615:war exploded` (not plain `CI615:war`)
+
+2. **Configure update actions:**
+   - Server tab → **On 'Update' action:** "Update classes and resources"
+   - Server tab → **On frame deactivation:** "Update classes and resources"
+
+3. **Force rebuild:**
+```powershell
+mvn clean package
+```
+Then restart Tomcat in IntelliJ
+
+### Issue: Navigation Links Not Working
+
+**Cause:** Using absolute paths with context path expression
+
+**Fix:** All JSP files now use relative paths:
+- ✅ `<a href="booking">Book a Room</a>`
+- ✅ `<form action="booking" method="post">`
+- ❌ ~~`<a href="${pageContext.request.contextPath}/booking">`~~
+
+This was already fixed in the current version.
+
+### Issue: Port 8080 Already in Use
+
+**Symptoms:**
+```
+Address already in use: bind
+```
+
+**Solutions:**
+
+**Option 1: Change Tomcat Port**
+1. Edit `apache-tomcat-10.1.50\conf\server.xml`
+2. Find: `<Connector port="8080"`
+3. Change to: `<Connector port="8081"` (or another free port)
+4. Update Run Configuration URL accordingly
+
+**Option 2: Kill Process Using Port 8080**
+```powershell
+# Find process
+netstat -ano | findstr :8080
+
+# Kill it (replace PID with actual process ID)
+Stop-Process -Id PID -Force
+```
 
 ---
 
@@ -793,20 +978,32 @@ src/main/java/org/example/
 
 ## Summary
 
-This documentation covered:
+This documentation covers:
 
 ✅ **Maven Setup:** Added IntelliJ's bundled Maven to system PATH  
 ✅ **JAVA_HOME:** Configured environment variable for Maven  
 ✅ **Tomcat Installation:** Extracted Tomcat 10.1.50 to project directory  
 ✅ **pom.xml Configuration:** Added Jakarta EE dependencies with correct scopes  
-✅ **Web Application Structure:** Created `web.xml` and `index.jsp`  
+✅ **JSTL Dependencies:** Complete JSTL implementation included in WAR  
+✅ **Web Application Structure:** Created `web.xml` and JSP pages  
 ✅ **IntelliJ Run Configuration:** Configured Tomcat server with deployment artifact  
-✅ **Verification:** Successfully built and deployed application  
+✅ **Navigation:** All links use relative paths for portability  
+✅ **Deployment:** Multiple deployment methods documented  
+✅ **Troubleshooting:** Common issues and solutions documented  
 
-**Working URL:** http://localhost:8080/CI615_war
+**Application URLs:**
+- http://localhost:8080/CI615-1.0-SNAPSHOT/ (manual Tomcat deployment)
+- http://localhost:8080/CI615_war/ (IntelliJ deployment with custom context)
+
+**Key Features:**
+- Room booking system with servlet-based MVC pattern
+- JSP pages with JSTL for dynamic content
+- In-memory repository pattern for data storage
+- Fully functional create and cancel booking operations
 
 ---
 
 **Project:** CI615 Music Conservatory Booking System  
-**Last Updated:** December 9, 2025
+**Last Updated:** December 11, 2025
+
 

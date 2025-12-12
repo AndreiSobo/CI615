@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,6 +52,6 @@
 
     <button type="submit">Book Room</button>
 </form>
-<p><a href="${pageContext.request.contextPath}/">Back to Home</a></p>
+<p><a href="index.jsp">Back to Home</a> | <a href="booking?action=list">View All Bookings</a></p>
 </body>
 </html>

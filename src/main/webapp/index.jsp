@@ -49,8 +49,14 @@
 
         <h3>Room Booking System:</h3>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/booking">Book a Room</a></li>
-            <li><a href="${pageContext.request.contextPath}/booking?action=list">View All Bookings</a></li>
+            <li><a href="booking">Book a Room</a></li>
+            <li><a href="booking?action=list">View All Bookings</a></li>
+        </ul>
+
+        <h3>Quick Links:</h3>
+        <ul>
+            <li><a href="book.jsp">Direct to Book Form (JSP)</a></li>
+            <li><a href="bookings.jsp">Direct to Bookings List (JSP)</a></li>
         </ul>
     </div>
 </body>

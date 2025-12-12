@@ -17,7 +17,7 @@ For detailed setup instructions including:
 - IntelliJ IDEA run configuration
 - Troubleshooting guide
 
-Please see: **[SETUP_DOCUMENTATION.md](doc/SETUP_DOCUMENTATION.md)**
+Please see: **[DOCUMENTATION.md](doc/DOCUMENTATION.md)**
 
 ## Technology Stack
 

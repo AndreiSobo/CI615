@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +62,7 @@
           <td>${booking.nrOfParticipants}</td>
           <td>${booking.recurrent ? 'Yes' : 'No'}</td>
           <td>
-            <form action="${pageContext.request.contextPath}/booking"
+            <form action="booking"
                   method="post" style="display: inline;">
               <input type="hidden" name="action" value="cancel">
               <input type="hidden" name="bookingID" value="${booking.bookingID}">
@@ -79,6 +79,9 @@
   </c:otherwise>
 </c:choose>
 
-<p><a href="${pageContext.request.contextPath}/">Back to Home</a></p>
+<p>
+  <a href="index.jsp">Back to Home</a> |
+  <a href="booking">Book a Room</a>
+</p>
 </body>
 </html>
