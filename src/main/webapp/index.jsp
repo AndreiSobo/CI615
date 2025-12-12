@@ -35,17 +35,9 @@
 
         <div class="info">
             <p><strong>Server Time:</strong> <%= new java.util.Date() %></p>
-            <p><strong>Project Status:</strong> Successfully deployed!</p>
         </div>
 
-        <p>This is the Jakarta EE web application for Object Oriented Design and Architecture.</p>
-
-        <h3>Getting Started:</h3>
-        <ul>
-            <li>Create servlets in <code>src/main/java</code></li>
-            <li>Create JSP pages in <code>src/main/webapp</code></li>
-            <li>Configure web components in <code>WEB-INF/web.xml</code></li>
-        </ul>
+        <p>Jakarta EE web application for Object Oriented Design and Architecture.</p>
 
         <h3>Room Booking System:</h3>
         <ul>
